@@ -24,8 +24,8 @@
 
 
     <body style='background-color: #9999ff'>
-        <?php include "partials/_header.php"?>
-        <?php include "partials/_dbconnect.php"?>
+        <?php include "_header.php"?>
+        <?php include "_dbconnect.php"?>
         <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
             <ol class="carousel-indicators">
                 <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
@@ -93,7 +93,7 @@
 
 
 
-        <?php include "partials/_footer.php"?>
+        <?php include "_footer.php"?>
 
         <!-- Optional JavaScript -->
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -109,3 +109,4 @@
     </body>
 
 </html>
+
