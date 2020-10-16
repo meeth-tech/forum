@@ -9,15 +9,16 @@
         object-fit: cover;
     }
     </style>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <php <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title>iDiscuss </title>
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+            integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+        <title>iDiscuss </title>
 </head>
 
 <body>
@@ -25,88 +26,120 @@
 
     <body style='background-color: #9999ff'>
         <?php include "_header.php"?>
-        <?php include "_dbconnect.php"?>
-        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-            <ol class="carousel-indicators">
-                <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-                <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-                <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-            </ol>
-            <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <img src="carousel1.jpg" class="d-block w-100" alt="...">
-                </div>
-                <div class="carousel-item">
-                    <img src="carousel2.jpg" class="d-block w-100" alt="...">
-                </div>
-                <div class="carousel-item">
-                    <img src="carousel3.jpg" class="d-block w-100" alt="...">
-                </div>
-            </div>
-            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="sr-only">Previous</span>
-            </a>
-            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="sr-only">Next</span>
-            </a>
-        </div>
-        <div class="container my-3">
+        <?php include "_dbconnect.php";?>
+        <?php
+        $id=$_GET['catid'];
+        $sql="SELECT * FROM `categories` WHERE category_id=$id";
+        $result=mysqli_query($conn,$sql);
+         while ($row=mysqli_fetch_assoc($result)) {
+            
+            //echo $row['category_name'];
+            $catname=$row['category_name'];
+            $catdesc=$row['categoy_description'];
+            
+            
+       
+         }
+         ?>
 
-            <h2 class="text-center">Welcome to iDiscuss- Browse Catergories</h2>
-            <div class="row">
-                <?php
-                    $sql="SELECT * FROM `categories`";
+        <div class="container" my-4>
+            <div class="jumbotron">
+                <h1 class="display-4">Welcome to <?php echo $catname ?> forums</h1>
+                <p class="lead"></p>
+                <hr class="my-4">
+                <p><?php echo $catdesc?>
+
+                </p>
+                <p>
+                    No Spam / Advertising / Self-promote in the forums.
+                    Do not post copyright-infringing material.
+                    Do not post “offensive” posts, links or images.
+                    Do not cross post questions.
+                    Do not PM users asking for help.
+                    Remain respectful of other members at all times.
+                </p>
+
+               
+            </div>
+            <div class="container">
+                            <h3 style="text-align:center">Ask a question </h3>
+            </div>
+            <div class="container">
+            
+                <form method="post" action="/~ubuntu/thread_list.php">
+  <div class="form-group">
+    <label for="exampleInputEmail1"><strong>Question Title</strong></label>
+    <input type="text" class="form-control" id="title" name="title" aria-describedby="emailHelp" placeholder="Question title here">
+
+  </div>
+   <div class="form-group">
+    <label for="desc"><strong>Ellaborate your question</strong></label>
+    <textarea class="form-control" id="desc" name="desc" rows="3" placeholder="Question description here"></textarea>
+  </div>
+ 
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+            </div>
+
+
+            <h3 style="text-align:center">Browse questions </h3>
+            <?php
+                    $id=$_GET['catid'];
+                    $sql="SELECT * FROM `threads` WHERE thread_category_id=$id";
                     $result=mysqli_query($conn,$sql);
+                    $questions= true;
                    
-                    while ($row=mysqli_fetch_assoc($result)) {
-                       $id= $row['category_id'];
-                       // echo $row['category_name'];
-                       $cat=$row['category_name'];
-                       $cat_desc=$row['categoy_description'];
-                         echo'<div class="col-md-4 my-2">
-                        <div class="card " >
-                            <img src="'.$cat.'.jpg" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <h5 class="card-title"><a href="thread_list.php?catid=' .$id. '">' .$cat. '</a></h5>
-                                <p class="card-text">'.substr($cat_desc, 0, 90). '...
-                                <br>
-                                <a href="thread_list.php" class="btn btn-primary md -6" >Explore Forum</a> 
-                            </div>
+                    while($row=mysqli_fetch_assoc($result)) {
+
+                        // echo $row['category_name'];
+                       
+                        $id=$row['thread_id'];
+                        $title=$row['thread_title'];
+
+                        $desc=$row['thread_des'];
+                        $questions=false;
+                       
+                  
+                   
+                        
+                        echo' <div class="media">
+                                <img src="userdefault.png" class="mr-3" alt="..." width="54" px>
+                                <div class="media-body">
+                                    <h5 class="mt-0"><a href="thread.php?threadid='.$id.'">'. $title .'</a></h5>
+                           '.$desc.'
                         </div>
-                        
-                </div>';
+                    </div>';
+
+                }
+                        if ($questions) {
+                    echo'<div class="alert alert-secondary" style="width: 100%;" role="alert">
+    <p class="text-center">
+     <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>        <strong>Oops!</strong> No questions found. Be the first one to ask.
+    </p>
+</div>'    ;
+                    }
+               
+         
+            
+        ?>
 
 
-                
-                        
-                        }
-                    ?>
-            </div>
+            <?php include "partials/_footer.php"?>
 
-        </div>
-
-
-
-
-
-
-
-        <?php include "_footer.php"?>
-
-        <!-- Optional JavaScript -->
-        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
-        </script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
-            integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous">
-        </script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
-            integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous">
-        </script>
+            <!-- Optional JavaScript -->
+            <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+            <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+                integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+                crossorigin="anonymous">
+            </script>
+            <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+                integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+                crossorigin="anonymous">
+            </script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+                integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+                crossorigin="anonymous">
+            </script>
     </body>
 
 </html>
-
