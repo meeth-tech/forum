@@ -25,8 +25,8 @@
 
 
     <body style='background-color: #9999ff'>
-        <?php include "_header.php"?>
-        <?php include "_dbconnect.php";?>
+        <?php include "partials/_header.php"?>
+        <?php include "partials/_dbconnect.php";?>
         <?php
         $id=$_GET['catid'];
         $sql="SELECT * FROM `categories` WHERE category_id=$id";
@@ -41,7 +41,26 @@
        
          }
          ?>
-
+        <?php
+        $method=$_SERVER['REQUEST_METHOD'];
+        //$showalert=false;
+        if ($method=='POST') {
+            $th_title=$_POST['title'];
+            $th_desc=$_POST['desc'];
+            
+            $sql="INSERT INTO `threads` ( `thread_title`, `thread_des`, `thread_user_id`, `thread_category_id`, `timestamp`) VALUES ( '$th_title', '$th_desc', '0', '$id', current_timestamp());";
+            $result=mysqli_query($conn,$sql);
+            //$showalert=true;
+            /*if ($showalert) {
+                echo'<div class="alert alert-warning alert-dismissible fade show" role="alert">
+  <strong>Holy guacamole!</strong> You should check in on some of those fields below.
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>';
+            }*/
+        }
+        ?>
         <div class="container" my-4>
             <div class="jumbotron">
                 <h1 class="display-4">Welcome to <?php echo $catname ?> forums</h1>
@@ -59,26 +78,29 @@
                     Remain respectful of other members at all times.
                 </p>
 
-               
-            </div>
-            <div class="container">
-                            <h3 style="text-align:center">Ask a question </h3>
-            </div>
-            <div class="container">
-            
-                <form method="post" action="/~ubuntu/thread_list.php">
-  <div class="form-group">
-    <label for="exampleInputEmail1"><strong>Question Title</strong></label>
-    <input type="text" class="form-control" id="title" name="title" aria-describedby="emailHelp" placeholder="Question title here">
 
-  </div>
-   <div class="form-group">
-    <label for="desc"><strong>Ellaborate your question</strong></label>
-    <textarea class="form-control" id="desc" name="desc" rows="3" placeholder="Question description here"></textarea>
-  </div>
- 
-  <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+            </div>
+            <div class="container">
+                <h3 style="text-align:center">Ask a question </h3>
+            </div>
+            <div class="container">
+
+                <form method="post" action=<?php echo $_SERVER['REQUEST_URI']
+                ?>>
+                    <div class="form-group">
+                        <label for="exampleInputEmail1"><strong>Question Title</strong></label>
+                        <input type="text" class="form-control" id="title" name="title" aria-describedby="emailHelp"
+                            placeholder="Question title here">
+
+                    </div>
+                    <div class="form-group">
+                        <label for="desc"><strong>Ellaborate your question</strong></label>
+                        <textarea class="form-control" id="desc" name="desc" rows="3"
+                            placeholder="Question description here"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
             </div>
 
 
@@ -121,11 +143,7 @@
                
          
             
-        ?>
-
-
-            <?php include "partials/_footer.php"?>
-
+        ?> <?php //include "partials/_footer.php"?>
             <!-- Optional JavaScript -->
             <!-- jQuery first, then Popper.js, then Bootstrap JS -->
             <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
@@ -141,5 +159,3 @@
                 crossorigin="anonymous">
             </script>
     </body>
-
-</html>
